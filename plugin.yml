@@ -1,0 +1,7 @@
+name: C-Mine
+version: 1.0
+main: mine.chlwhdtn.Mine
+softdepend: [C-Economy,C-Land]
+
+commands:
+  광산:
