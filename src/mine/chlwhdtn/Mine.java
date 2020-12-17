@@ -3,7 +3,9 @@ package mine.chlwhdtn;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,6 +17,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import economy.chlwhdtn.Economy;
+import util.chlwhdtn.CUtil;
 
 public class Mine extends JavaPlugin implements Listener, CommandExecutor {
 	@Override
@@ -36,48 +39,41 @@ public class Mine extends JavaPlugin implements Listener, CommandExecutor {
 	@Override
 	public void onDisable() {
 		MineFileManager.saveConfig();
+		StatFileManager.saveConfig();
 	}
 
 	@EventHandler(priority = EventPriority.LOW)
 	public void onBreak(BlockBreakEvent event) {
 		if (MineManager.isMinedBlock(event.getBlock().getLocation())) {
-			int random = new Random().nextInt(1000); // 0 ~ 999 : 1000가지 경우
+			MinePlayerStat chance = StatManager.getStat(event.getPlayer().getName());
+			CUtil.addScore(event.getPlayer(), "mining", "채굴", 1);
+			float random = new Random().nextFloat();
 			Material nextBlock;
-			switch (random) {
-
-			case 0: // 0.1% 확률
+			
+			if(random < chance.DIAMOND_CHANCE) {
+				System.out.println(random  + " " + chance.DIAMOND_CHANCE);
 				nextBlock = Material.DIAMOND_ORE;
-				break;
-			default:
-				random = new Random().nextInt(100); // 0 ~ 99 : 100가지 경우
-				switch (random) {
-				case 0: // 1% 확률
-					nextBlock = Material.GOLD_ORE;
-					break;
-				case 1: // 1% 확률
-					nextBlock = Material.LAPIS_ORE;
-					break;
-				default:
-					random = new Random().nextInt(20); // 0 ~ 19 : 20가지 경우
-					switch (random) {
-					case 0: // 5% 확률
-						nextBlock = Material.IRON_ORE;
-						break;
-					case 1: case 2: // 10% 확률
-						nextBlock = Material.COAL_ORE;
-						break;
-					case 3: // 5% 확률
-						nextBlock = Material.REDSTONE_ORE;
-						break;
-					default: // 85% 확률
-						nextBlock = Material.STONE;
-						break;
-					}
-					break;
-				}
-				break;
-
+				random = new Random().nextFloat();
+			} else if(random < chance.LAPIS_CHANCE) {
+				nextBlock = Material.LAPIS_ORE;
+				random = new Random().nextFloat();
+			} else if(random < chance.GOLD_CHANCE) {
+				nextBlock = Material.GOLD_ORE;
+				random = new Random().nextFloat();
+			} else if(random < chance.IRON_CHANCE) {
+				nextBlock = Material.IRON_ORE;
+				random = new Random().nextFloat();
+			} else if(random < chance.REDSTONE_CHANCE) {
+				nextBlock = Material.REDSTONE_ORE;
+				random = new Random().nextFloat();
+			} else if(random < chance.COAL_CHANCE) {
+				nextBlock = Material.COAL_ORE;
+				random = new Random().nextFloat();
+			} else {
+				nextBlock = Material.STONE;
 			}
+			
+			
 			Bukkit.getScheduler().scheduleSyncDelayedTask(Economy.getInstance(), new Runnable() {
 
 				@Override
