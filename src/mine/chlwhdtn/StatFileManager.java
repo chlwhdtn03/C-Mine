@@ -27,8 +27,9 @@ public class StatFileManager {
 					(float)Config.getDouble("chance."+name+".gold"), 
 					(float)Config.getDouble("chance."+name+".lapis"), 
 					(float)Config.getDouble("chance."+name+".iron"), 
-					(float)Config.getDouble("chance."+name+".redstone"), 
-					(float)Config.getDouble("chance."+name+".coal")
+					(float)Config.getDouble("chance."+name+".coal"),
+					(float)Config.getDouble("chance."+name+".redstone"),
+					(float)Config.getDouble("chance."+name+".ancient")
 					));
 		}
 	}
@@ -49,11 +50,12 @@ public class StatFileManager {
 			for (String name : StatManager.getMaps().keySet()) {
 				temp = StatManager.getStat(name);
 				Config.set("chance." + name + ".diamond", temp.DIAMOND_CHANCE);
-				Config.set("chance" + name + ".gold", temp.GOLD_CHANCE);
+				Config.set("chance." + name + ".gold", temp.GOLD_CHANCE);
 				Config.set("chance." + name + ".lapis", temp.LAPIS_CHANCE);
 				Config.set("chance." + name + ".iron", temp.IRON_CHANCE);
 				Config.set("chance." + name + ".redstone", temp.REDSTONE_CHANCE);
-				Config.set("chance" + name + ".coal", temp.COAL_CHANCE);
+				Config.set("chance." + name + ".coal", temp.COAL_CHANCE);
+				Config.set("chance." + name + ".ancient", temp.ANCIENT_CHANCE);
 			}
 			getConfig().save(ConfigFile);
 		} catch (IOException e) {

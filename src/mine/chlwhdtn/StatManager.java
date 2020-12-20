@@ -12,8 +12,6 @@ public class StatManager {
 	}
 	
 	public static MinePlayerStat getStat(String player) {
-		if(!hashmap.containsKey(player))
-			return new MinePlayerStat();
 		return hashmap.get(player);
 	}
 	
